@@ -35,7 +35,6 @@ int main() {
 	}
 
 	A[0][2] = 0;
-	// Calculation of Waiting Times
 	for (i = 1; i < n; i++) {
 		A[i][2] = 0;
 		for (j = 0; j < i; j++)
