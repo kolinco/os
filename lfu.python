@@ -1,0 +1,44 @@
+from collections import defaultdict
+
+def lfu_page_replacement(pages, frame_size):
+    frame = []  # To store pages in memory
+    frequency = defaultdict(int)  # To track the frequency of each page
+    page_faults = 0
+    total_pages = len(pages)
+
+    print("Iteration | Frame State           | Result")
+    print("------------------------------------------")
+
+    for i, page in enumerate(pages):
+        # Update the frequency of the current page
+        frequency[page] += 1
+
+        if page in frame:  # Page is already in the frame (HIT)
+            result = "HIT"
+        else:  # Page fault occurs (MISS)
+            page_faults += 1
+            result = "MISS"
+
+            if len(frame) < frame_size:  # If frame is not full
+                frame.append(page)
+            else:  # Frame is full, remove the least frequently used page
+                # Find the least frequently used page in the frame
+                lfu_page = min(frame, key=lambda x: frequency[x])
+                frame.remove(lfu_page)  # Remove the LFU page
+                frame.append(page)  # Add the new page
+
+        # Display the iteration details
+        print(f"{i+1:<9} | {frame} | {result}")
+
+    # Calculate and display the miss ratio
+    miss_ratio = page_faults / total_pages
+    print("\nTotal Page Faults:", page_faults)
+    print("Miss Ratio:", round(miss_ratio, 2))
+
+
+# Input parameters
+pages = [7, 0, 1, 8, 0, 3, 0, 4, 8, 3, 0, 3, 8, 3]
+frame_size = 3
+
+# Execute the LFU page replacement
+lfu_page_replacement(pages, frame_size)
