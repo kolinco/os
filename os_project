@@ -1,0 +1,527 @@
+dexter@mail:~$ sudo nano /etc/hosts
+[sudo] password for dexter: 
+Sorry, try again.
+[sudo] password for dexter: 
+dexter@mail:~$ hostname 
+mail
+dexter@mail:~$ hostname  --fqdn
+mail.project.com
+dexter@mail:~$ sudo apt install postfix
+The following package was automatically installed and is no longer required:
+  grub-pc-bin
+Use 'sudo apt autoremove' to remove it.
+
+Installing:
+  postfix
+
+Suggested packages:
+  mail-reader   postfix-lmdb              postfix-pcre    sasl2-bin
+  postfix-cdb   postfix-mta-sts-resolver  postfix-pgsql   | dovecot-common
+  postfix-doc   postfix-mongodb           postfix-sqlite
+  postfix-ldap  postfix-mysql             procmail
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 9
+  Download size: 1,262 kB
+  Space needed: 4,234 kB / 89.5 GB available
+
+Get:1 http://archive.ubuntu.com/ubuntu oracular/main amd64 postfix amd64 3.9.0-3 [1,262 kB]
+Fetched 1,262 kB in 2s (669 kB/s)  
+Preconfiguring packages ...
+Selecting previously unselected package postfix.
+(Reading database ... 194199 files and directories currently installed.)
+Preparing to unpack .../postfix_3.9.0-3_amd64.deb ...
+Unpacking postfix (3.9.0-3) ...
+Setting up postfix (3.9.0-3) ...
+info: Selecting GID from range 100 to 999 ...
+info: Adding group `postfix' (GID 125) ...
+info: Selecting UID from range 100 to 999 ...
+
+info: Adding system user `postfix' (UID 122) ...
+info: Adding new user `postfix' (UID 122) with group `postfix' ...
+info: Not creating home directory `/var/spool/postfix'.
+Creating /etc/postfix/dynamicmaps.cf
+info: Selecting GID from range 100 to 999 ...
+info: Adding group `postdrop' (GID 126) ...
+setting myhostname: mail.project.com
+setting alias maps
+setting alias database
+changing /etc/mailname to project.com
+setting myorigin
+setting destinations: $myhostname, project.com, mail.project.com, localhost.proj
+ect.com, localhost
+setting relayhost: 
+setting mynetworks: 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+setting mailbox_size_limit: 0
+setting recipient_delimiter: +
+setting inet_interfaces: all
+setting inet_protocols: all
+/etc/aliases does not exist, creating it.
+WARNING: /etc/aliases exists, but does not have a root alias.
+
+Postfix (main.cf) is now set up with a default configuration.  If you need to 
+make changes, edit /etc/postfix/main.cf (and others) as needed.  To view 
+Postfix configuration values, see postconf(1).
+
+After modifying main.cf, be sure to run 'systemctl reload postfix'.
+
+Running newaliases
+Created symlink '/etc/systemd/system/multi-user.target.wants/postfix.service' → 
+'/usr/lib/systemd/system/postfix.service'.
+Processing triggers for ufw (0.36.2-6) ...
+Processing triggers for man-db (2.12.1-3) ...
+Processing triggers for rsyslog (8.2406.0-1ubuntu2) ...
+dexter@mail:~$ sudo systemctl status postfix
+● postfix.service - Postfix Mail Transport Agent
+     Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: >
+     Active: active (exited) since Fri 2024-11-29 09:38:03 +06; 19s ago
+ Invocation: 424284f68f4045d8b96c56f6e9275edf
+       Docs: man:postfix(1)
+    Process: 28078 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 28078 (code=exited, status=0/SUCCESS)
+   Mem peak: 1.5M
+        CPU: 4ms
+
+Nov 29 09:38:03 mail systemd[1]: Starting postfix.service - Postfix Mail Transp>
+Nov 29 09:38:03 mail systemd[1]: Finished postfix.service - Postfix Mail Transp>
+dexter@mail:~$ sudo postconf "home_mailbox = Maildir/"
+dexter@mail:~$ postconf -n
+alias_database = hash:/etc/aliases
+alias_maps = hash:/etc/aliases
+append_dot_mydomain = no
+biff = no
+compatibility_level = 3.6
+cyrus_sasl_config_path = /etc/postfix/sasl
+home_mailbox = Maildir/
+inet_interfaces = all
+inet_protocols = all
+mailbox_size_limit = 0
+mydestination = $myhostname, project.com, mail.project.com, localhost.project.com, localhost
+myhostname = mail.project.com
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+myorigin = /etc/mailname
+readme_directory = no
+recipient_delimiter = +
+relayhost =
+smtp_tls_CApath = /etc/ssl/certs
+smtp_tls_security_level = may
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+smtpd_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+smtpd_tls_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_security_level = may
+dexter@mail:~$ sudo apt install dovecot-imapd dovecot-pop3d dovecot-core
+The following package was automatically installed and is no longer required:
+  grub-pc-bin
+Use 'sudo apt autoremove' to remove it.
+
+Installing:
+  dovecot-core  dovecot-imapd  dovecot-pop3d
+
+Installing dependencies:
+  libexttextcat-2.0-0  libexttextcat-data
+
+Suggested packages:
+  dovecot-gssapi  dovecot-managesieved  dovecot-sieve   dovecot-submissiond
+  dovecot-ldap    dovecot-mysql         dovecot-solr    ntp
+  dovecot-lmtpd   dovecot-pgsql         dovecot-sqlite
+
+Summary:
+  Upgrading: 0, Installing: 5, Removing: 0, Not Upgrading: 9
+  Download size: 3,787 kB
+  Space needed: 12.2 MB / 89.5 GB available
+
+Continue? [Y/n] y
+Get:1 http://archive.ubuntu.com/ubuntu oracular/main amd64 libexttextcat-data all 3.4.7-1build1 [193 kB]
+Get:2 http://archive.ubuntu.com/ubuntu oracular/main amd64 libexttextcat-2.0-0 amd64 3.4.7-1build1 [13.3 kB]
+Get:3 http://archive.ubuntu.com/ubuntu oracular/main amd64 dovecot-core amd64 1:2.3.21.1+dfsg1-1ubuntu1 [3,353 kB]
+Get:4 http://archive.ubuntu.com/ubuntu oracular/main amd64 dovecot-imapd amd64 1:2.3.21.1+dfsg1-1ubuntu1 [191 kB]
+Get:5 http://archive.ubuntu.com/ubuntu oracular/main amd64 dovecot-pop3d amd64 1:2.3.21.1+dfsg1-1ubuntu1 [37.1 kB]
+Fetched 3,787 kB in 4s (1,041 kB/s)      
+Selecting previously unselected package libexttextcat-data.
+(Reading database ... 194397 files and directories currently installed.)
+Preparing to unpack .../libexttextcat-data_3.4.7-1build1_all.deb ...
+Unpacking libexttextcat-data (3.4.7-1build1) ...
+Selecting previously unselected package libexttextcat-2.0-0:amd64.
+Preparing to unpack .../libexttextcat-2.0-0_3.4.7-1build1_amd64.deb ...
+Unpacking libexttextcat-2.0-0:amd64 (3.4.7-1build1) ...
+Selecting previously unselected package dovecot-core.
+Preparing to unpack .../dovecot-core_1%3a2.3.21.1+dfsg1-1ubuntu1_amd64.deb ...
+Unpacking dovecot-core (1:2.3.21.1+dfsg1-1ubuntu1) ...
+Selecting previously unselected package dovecot-imapd.
+Preparing to unpack .../dovecot-imapd_1%3a2.3.21.1+dfsg1-1ubuntu1_amd64.deb ...
+Unpacking dovecot-imapd (1:2.3.21.1+dfsg1-1ubuntu1) ...
+Selecting previously unselected package dovecot-pop3d.
+Preparing to unpack .../dovecot-pop3d_1%3a2.3.21.1+dfsg1-1ubuntu1_amd64.deb ...
+Unpacking dovecot-pop3d (1:2.3.21.1+dfsg1-1ubuntu1) ...
+Setting up libexttextcat-data (3.4.7-1build1) ...
+Setting up libexttextcat-2.0-0:amd64 (3.4.7-1build1) ...
+Setting up dovecot-core (1:2.3.21.1+dfsg1-1ubuntu1) ...
+
+Creating config file /etc/dovecot/dovecot.conf with new version
+
+Creating config file /etc/dovecot/dovecot-dict-auth.conf.ext with new version
+
+Creating config file /etc/dovecot/dovecot-dict-sql.conf.ext with new version
+
+Creating config file /etc/dovecot/dovecot-sql.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/10-auth.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-director.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-logging.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-mail.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-master.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-ssl.conf with new version
+
+Creating config file /etc/dovecot/conf.d/10-tcpwrapper.conf with new version
+
+Creating config file /etc/dovecot/conf.d/15-lda.conf with new version
+
+Creating config file /etc/dovecot/conf.d/15-mailboxes.conf with new version
+
+Creating config file /etc/dovecot/conf.d/90-acl.conf with new version
+
+Creating config file /etc/dovecot/conf.d/90-plugin.conf with new version
+
+Creating config file /etc/dovecot/conf.d/90-quota.conf with new version
+
+Creating config file /etc/dovecot/conf.d/auth-checkpassword.conf.ext with new ve
+rsion
+
+Creating config file /etc/dovecot/conf.d/auth-deny.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/auth-dict.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/auth-master.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/auth-passwdfile.conf.ext with new versi
+on
+
+Creating config file /etc/dovecot/conf.d/auth-sql.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/auth-static.conf.ext with new version
+
+Creating config file /etc/dovecot/conf.d/auth-system.conf.ext with new version
+Created symlink '/etc/systemd/system/multi-user.target.wants/dovecot.service' → 
+'/usr/lib/systemd/system/dovecot.service'.
+dovecot.socket is a disabled or a static unit, not starting it.
+Setting up dovecot-imapd (1:2.3.21.1+dfsg1-1ubuntu1) ...
+
+Creating config file /etc/dovecot/conf.d/20-imap.conf with new version
+Setting up dovecot-pop3d (1:2.3.21.1+dfsg1-1ubuntu1) ...
+
+Creating config file /etc/dovecot/conf.d/20-pop3.conf with new version
+Processing triggers for ufw (0.36.2-6) ...
+Processing triggers for man-db (2.12.1-3) ...
+Processing triggers for libc-bin (2.40-1ubuntu3) ...
+Processing triggers for dovecot-core (1:2.3.21.1+dfsg1-1ubuntu1) ...
+dexter@mail:~$ sudo systemctl status postfix
+● postfix.service - Postfix Mail Transport Agent
+     Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: >
+     Active: active (exited) since Fri 2024-11-29 09:38:03 +06; 5min ago
+ Invocation: 424284f68f4045d8b96c56f6e9275edf
+       Docs: man:postfix(1)
+   Main PID: 28078 (code=exited, status=0/SUCCESS)
+   Mem peak: 1.5M
+        CPU: 4ms
+
+Nov 29 09:38:03 mail systemd[1]: Starting postfix.service - Postfix Mail Transp>
+Nov 29 09:38:03 mail systemd[1]: Finished postfix.service - Postfix Mail Transp>
+dexter@mail:~$ sudo systemctl status dovecot
+● dovecot.service - Dovecot IMAP/POP3 email server
+     Loaded: loaded (/usr/lib/systemd/system/dovecot.service; enabled; preset: >
+     Active: active (running) since Fri 2024-11-29 09:43:05 +06; 44s ago
+ Invocation: 4a0b6811e35a47f3800be565da5fb389
+       Docs: man:dovecot(1)
+             https://doc.dovecot.org/
+   Main PID: 32168 (dovecot)
+     Status: "v2.3.21.1 (d492236fa0) running"
+      Tasks: 4 (limit: 18130)
+     Memory: 3.3M (peak: 4.1M)
+        CPU: 33ms
+     CGroup: /system.slice/dovecot.service
+             ├─32168 /usr/sbin/dovecot -F
+             ├─32169 dovecot/anvil
+             ├─32170 dovecot/log
+             └─32171 dovecot/config
+
+Nov 29 09:43:05 mail systemd[1]: Starting dovecot.service - Dovecot IMAP/POP3 e>
+Nov 29 09:43:05 mail dovecot[32168]: master: Dovecot v2.3.21.1 (d492236fa0) sta>
+Nov 29 09:43:05 mail systemd[1]: Started dovecot.service - Dovecot IMAP/POP3 em>
+dexter@mail:~$ sudo systemctl reload dovecot
+dexter@mail:~$ sudo systemctl reload postfix
+dexter@mail:~$ sudo nano /etc/dovecot/conf.d/10-mail.conf
+dexter@mail:~$ doveconf -n
+# 2.3.21.1 (d492236fa0): /etc/dovecot/dovecot.conf
+# Pigeonhole version 0.5.21.1 (49005e73)
+# OS: Linux 6.11.0-9-generic x86_64 Ubuntu 24.10 
+# Hostname: mail.project.com
+mail_location = maildir:~/Maildir
+mail_privileged_group = mail
+namespace inbox {
+  inbox = yes
+  location = 
+  mailbox Drafts {
+    special_use = \Drafts
+  }
+  mailbox Junk {
+    special_use = \Junk
+  }
+  mailbox Sent {
+    special_use = \Sent
+  }
+  mailbox "Sent Messages" {
+    special_use = \Sent
+  }
+  mailbox Trash {
+    special_use = \Trash
+  }
+  prefix = 
+}
+passdb {
+  driver = pam
+}
+protocols = " imap pop3"
+ssl_cert = </etc/dovecot/private/dovecot.pem
+ssl_client_ca_dir = /etc/ssl/certs
+ssl_dh = # hidden, use -P to show it
+ssl_key = # hidden, use -P to show it
+userdb {
+  driver = passwd
+}
+dexter@mail:~$ cd /etc/skel
+dexter@mail:/etc/skel$ sudo mkdir -p Maildir/cur Maildir/new Maildir/tmp
+dexter@mail:/etc/skel$ ls
+Maildir
+dexter@mail:/etc/skel$ cd Maildir/
+dexter@mail:/etc/skel/Maildir$ ls
+cur  new  tmp
+dexter@mail:/etc/skel/Maildir$ sudo apt install mutt
+The following package was automatically installed and is no longer required:
+  grub-pc-bin
+Use 'sudo apt autoremove' to remove it.
+
+Installing:
+  mutt
+
+Installing dependencies:
+  bzip2         libgsasl18   libntlm0             mailcap
+  gsasl-common  libgssglue1  libtokyocabinet9t64
+
+Suggested packages:
+  bzip2-doc  urlview
+
+Summary:
+  Upgrading: 0, Installing: 8, Removing: 0, Not Upgrading: 9
+  Download size: 1,625 kB
+  Space needed: 6,352 kB / 89.5 GB available
+
+Continue? [Y/n] y
+Get:1 http://archive.ubuntu.com/ubuntu oracular/main amd64 bzip2 amd64 1.0.8-6 [34.6 kB]
+Get:2 http://archive.ubuntu.com/ubuntu oracular/main amd64 gsasl-common all 2.2.1-1willsync1ubuntu1 [5,152 B]
+Get:3 http://archive.ubuntu.com/ubuntu oracular/main amd64 libgssglue1 amd64 0.9-1build1 [20.7 kB]
+Get:4 http://archive.ubuntu.com/ubuntu oracular/main amd64 libntlm0 amd64 1.8-3 [20.0 kB]
+Get:5 http://archive.ubuntu.com/ubuntu oracular/main amd64 libgsasl18 amd64 2.2.1-1willsync1ubuntu1 [82.4 kB]
+Get:6 http://archive.ubuntu.com/ubuntu oracular/main amd64 libtokyocabinet9t64 amd64 1.4.48-15.1build1 [398 kB]
+Get:7 http://archive.ubuntu.com/ubuntu oracular/main amd64 mailcap all 3.72ubuntu1 [24.1 kB]
+Get:8 http://archive.ubuntu.com/ubuntu oracular/main amd64 mutt amd64 2.2.13-1 [1,041 kB]
+Fetched 1,625 kB in 3s (626 kB/s)
+Selecting previously unselected package bzip2.
+(Reading database ... 195149 files and directories currently installed.)
+Preparing to unpack .../0-bzip2_1.0.8-6_amd64.deb ...
+Unpacking bzip2 (1.0.8-6) ...
+Selecting previously unselected package gsasl-common.
+Preparing to unpack .../1-gsasl-common_2.2.1-1willsync1ubuntu1_all.deb ...
+Unpacking gsasl-common (2.2.1-1willsync1ubuntu1) ...
+Selecting previously unselected package libgssglue1:amd64.
+Preparing to unpack .../2-libgssglue1_0.9-1build1_amd64.deb ...
+Unpacking libgssglue1:amd64 (0.9-1build1) ...
+Selecting previously unselected package libntlm0:amd64.
+Preparing to unpack .../3-libntlm0_1.8-3_amd64.deb ...
+Unpacking libntlm0:amd64 (1.8-3) ...
+Selecting previously unselected package libgsasl18:amd64.
+Preparing to unpack .../4-libgsasl18_2.2.1-1willsync1ubuntu1_amd64.deb ...
+Unpacking libgsasl18:amd64 (2.2.1-1willsync1ubuntu1) ...
+Selecting previously unselected package libtokyocabinet9t64:amd64.
+Preparing to unpack .../5-libtokyocabinet9t64_1.4.48-15.1build1_amd64.deb ...
+Unpacking libtokyocabinet9t64:amd64 (1.4.48-15.1build1) ...
+Selecting previously unselected package mailcap.
+Preparing to unpack .../6-mailcap_3.72ubuntu1_all.deb ...
+Unpacking mailcap (3.72ubuntu1) ...
+Selecting previously unselected package mutt.
+Preparing to unpack .../7-mutt_2.2.13-1_amd64.deb ...
+Unpacking mutt (2.2.13-1) ...
+Setting up libtokyocabinet9t64:amd64 (1.4.48-15.1build1) ...
+Setting up bzip2 (1.0.8-6) ...
+Setting up libntlm0:amd64 (1.8-3) ...
+Setting up libgssglue1:amd64 (0.9-1build1) ...
+Setting up libgsasl18:amd64 (2.2.1-1willsync1ubuntu1) ...
+Setting up gsasl-common (2.2.1-1willsync1ubuntu1) ...
+Setting up mailcap (3.72ubuntu1) ...
+Setting up mutt (2.2.13-1) ...
+Processing triggers for libc-bin (2.40-1ubuntu3) ...
+Processing triggers for man-db (2.12.1-3) ...
+Processing triggers for desktop-file-utils (0.27-2build1) ...
+Processing triggers for gnome-menus (3.36.0-1.1ubuntu3) ...
+dexter@mail:/etc/skel/Maildir$ sudo mkdir .mutt
+dexter@mail:/etc/skel/Maildir$ ls -la
+total 24
+drwxr-xr-x 6 root root 4096 Nov 29 09:50 .
+drwxr-xr-x 3 root root 4096 Nov 29 09:48 ..
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 cur
+drwxr-xr-x 2 root root 4096 Nov 29 09:50 .mutt
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 new
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 tmp
+dexter@mail:/etc/skel/Maildir$ cd .mutt
+dexter@mail:/etc/skel/Maildir/.mutt$ sudo nano mutt.rc
+dexter@mail:/etc/skel/Maildir/.mutt$ ls
+mutt.rc
+dexter@mail:/etc/skel/Maildir/.mutt$ cat mutt.rc 
+set imap_user = ""
+set imap_pass = ""
+
+set folder = imaps://mail
+set spoolfile = +INBOX
+
+set realname = ''
+set from = "$imap_user"
+set use_from = yes
+
+set sort=reverse-date
+
+mailboxes = INBOX
+
+
+set timeout=1
+
+set sidebar_visible = yes
+
+
+source ~/.mutt/mutt_colors
+dexter@mail:/etc/skel/Maildir/.mutt$ sudo nano mutt_colors
+dexter@mail:/etc/skel/Maildir/.mutt$ cd ..
+dexter@mail:/etc/skel/Maildir$ cd ..
+dexter@mail:/etc/skel$ ls
+Maildir
+dexter@mail:/etc/skel$ cd Maildir/
+dexter@mail:/etc/skel/Maildir$ LS
+LS: command not found
+dexter@mail:/etc/skel/Maildir$ ls
+cur  new  tmp
+dexter@mail:/etc/skel/Maildir$ ls -la
+total 24
+drwxr-xr-x 6 root root 4096 Nov 29 09:50 .
+drwxr-xr-x 3 root root 4096 Nov 29 09:48 ..
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 cur
+drwxr-xr-x 2 root root 4096 Nov 29 09:53 .mutt
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 new
+drwxr-xr-x 2 root root 4096 Nov 29 09:48 tmp
+dexter@mail:/etc/skel/Maildir$ sudo mv .mutt /etc/skel/
+dexter@mail:/etc/skel/Maildir$ ls
+cur  new  tmp
+dexter@mail:/etc/skel/Maildir$ cd ..
+dexter@mail:/etc/skel$ ls
+Maildir
+dexter@mail:/etc/skel$ ls -la
+total 36
+drwxr-xr-x   4 root root  4096 Nov 29 09:57 .
+drwxr-xr-x 145 root root 12288 Nov 29 09:49 ..
+-rw-r--r--   1 root root   220 Aug 20 14:58 .bash_logout
+-rw-r--r--   1 root root  3771 Aug 20 14:58 .bashrc
+drwxr-xr-x   5 root root  4096 Nov 29 09:57 Maildir
+drwxr-xr-x   2 root root  4096 Nov 29 09:53 .mutt
+-rw-r--r--   1 root root   807 Aug 20 14:58 .profile
+dexter@mail:/etc/skel$ sudo chmod 700 -R /etc/skel
+dexter@mail:/etc/skel$ sudo adduser --gecos"" lara
+fatal: Only one or two names allowed.
+dexter@mail:/etc/skel$ sudo adduser  lara
+info: Adding user `lara' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `lara' (1002) ...
+info: Adding new user `lara' (1002) with group `lara (1002)' ...
+info: Creating home directory `/home/lara' ...
+info: Copying files from `/etc/skel' ...
+New password: 
+BAD PASSWORD: No password supplied
+Retype new password: 
+No password has been supplied.
+passwd: Authentication token manipulation error
+passwd: password unchanged
+Try again? [y/N] y
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: password updated successfully
+Changing the user information for lara
+Enter the new value, or press ENTER for the default
+	Full Name []: lara crof
+	Room Number []: 
+	Work Phone []: 
+	Home Phone []: 
+	Other []: 
+Is the information correct? [Y/n] y
+info: Adding new user `lara' to supplemental / extra groups `users' ...
+info: Adding user `lara' to group `users' ...
+dexter@mail:/etc/skel$ sudo adduser nathan
+info: Adding user `nathan' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `nathan' (1003) ...
+info: Adding new user `nathan' (1003) with group `nathan (1003)' ...
+info: Creating home directory `/home/nathan' ...
+info: Copying files from `/etc/skel' ...
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: password updated successfully
+Changing the user information for nathan
+Enter the new value, or press ENTER for the default
+	Full Name []: nathan
+	Room Number []: 
+	Work Phone []: 
+	Home Phone []: 
+	Other []: 
+Is the information correct? [Y/n] y
+info: Adding new user `nathan' to supplemental / extra groups `users' ...
+info: Adding user `nathan' to group `users' ...
+dexter@mail:/etc/skel$ su lara
+Password: 
+lara@mail:/etc/skel$ cd ~
+lara@mail:~$ ls
+Maildir  snap
+lara@mail:~$ ls -la
+total 36
+drwxr-x--- 6 lara lara 4096 Nov 29 10:01 .
+drwxr-xr-x 6 root root 4096 Nov 29 10:00 ..
+-rwx------ 1 lara lara  220 Nov 29 09:59 .bash_logout
+-rwx------ 1 lara lara 3771 Nov 29 09:59 .bashrc
+drwx------ 3 lara lara 4096 Nov 29 10:01 .local
+drwx------ 5 lara lara 4096 Nov 29 09:59 Maildir
+drwx------ 2 lara lara 4096 Nov 29 09:59 .mutt
+-rwx------ 1 lara lara  807 Nov 29 09:59 .profile
+drwx------ 4 lara lara 4096 Nov 29 10:01 snap
+lara@mail:~$ cd .mutt
+lara@mail:~/.mutt$ ls
+mutt_colors  mutt.rc
+lara@mail:~/.mutt$ sudo nano mutt.rc 
+[sudo] password for lara: 
+lara is not in the sudoers file.
+This incident has been reported to the administrator.
+lara@mail:~/.mutt$ nano mutt.rc 
+lara@mail:~/.mutt$ cd ..
+lara@mail:~$ su nathan
+Password: 
+nathan@mail:/home/lara$ cd ~
+nathan@mail:~$ pwd
+/home/nathan
+nathan@mail:~$ nano ./mutt/mutt_rc
+nathan@mail:~$ cd .mutt/
+nathan@mail:~/.mutt$ ls
+mutt_colors  mutt.rc
+nathan@mail:~/.mutt$ nano mutt.rc
+nathan@mail:~/.mutt$ 
